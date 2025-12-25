@@ -1,8 +1,7 @@
-// config/mongodb.js
 import mongoose from 'mongoose';
 
 // MongoDB connection URI
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mydatabase';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mydatabase'; // replace with your URI
 
 // Function to connect to MongoDB
 export const connectDB = async () => {
