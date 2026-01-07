@@ -1,17 +1,29 @@
+import mongoose from "mongoose";
 import Complaint from "../Models/ComplaintModel.js";
 
 export const complaintOwnershipMiddleware = async (req, res, next) => {
   try {
-    const complaint = await Complaint.findOne({ complaintId: req.params.id });
-    if (!complaint) return res.status(404).json({ message: "Complaint not found" });
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid complaint ID" });
+    }
+
+    const complaint = await Complaint.findById(id);
+
+    if (!complaint) {
+      return res.status(404).json({ message: "Complaint not found" });
+    }
 
     if (complaint.userId.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Access denied. This is not your complaint." });
+      return res.status(403).json({ message: "Access denied" });
     }
 
     req.complaint = complaint;
     next();
+
   } catch (err) {
-    return res.status(500).json({ message: "Server error in ownership middleware" });
+    console.error("Ownership Middleware Error:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
