@@ -1,12 +1,15 @@
 import mongoose from 'mongoose';
 
 // MongoDB connection URI
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mydatabase'; // replace with your URI
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/complains';
 
 // Function to connect to MongoDB
 export const connectDB = async () => {
   try {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
